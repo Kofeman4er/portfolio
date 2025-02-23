@@ -11,15 +11,6 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
-  {
-    rules: {
-      // Disable specific rules if needed
-      "@typescript-eslint/no-explicit-any": "off", // Example: Disable the rule for `any`
-      "react/jsx-no-target-blank": "off", // Example: Disable this rule for JSX links
-    },
-    // Optional: Add additional configuration to ignore ESLint warnings during builds
-    ignoreDuringBuilds: true,  // Ignores ESLint errors in production builds
-  },
 ];
 
 export default eslintConfig;
