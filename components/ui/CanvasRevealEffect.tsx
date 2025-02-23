@@ -209,10 +209,11 @@ const ShaderMaterial = ({
   });
 
   const getUniforms = () => {
-    const preparedUniforms: any = {};
+    const preparedUniforms: Record<string, { value: number | number[] | THREE.Vector2 | THREE.Vector3; type: string }> = {};
 
     for (const uniformName in uniforms) {
-      const uniform: any = uniforms[uniformName];
+      const uniform = uniforms[uniformName] as { value: number | number[] | THREE.Vector2 | THREE.Vector3; type: string };
+
 
       switch (uniform.type) {
         case "uniform1f":
@@ -220,24 +221,25 @@ const ShaderMaterial = ({
           break;
         case "uniform3f":
           preparedUniforms[uniformName] = {
-            value: new THREE.Vector3().fromArray(uniform.value),
+            value: Array.isArray(uniform.value) ? new THREE.Vector3().fromArray(uniform.value) : uniform.value,
+
             type: "3f",
           };
           break;
         case "uniform1fv":
           preparedUniforms[uniformName] = { value: uniform.value, type: "1fv" };
           break;
-        case "uniform3fv":
-          preparedUniforms[uniformName] = {
-            value: uniform.value.map((v: number[]) =>
-              new THREE.Vector3().fromArray(v)
-            ),
-            type: "3fv",
-          };
-          break;
+          case "uniform3fv":
+            preparedUniforms[uniformName] = {
+              value: uniform.value.map((v: number[]) =>
+                new THREE.Vector3().fromArray(v)
+              ),
+              type: "3fv",
+            };
+            break;
         case "uniform2f":
           preparedUniforms[uniformName] = {
-            value: new THREE.Vector2().fromArray(uniform.value),
+            value: Array.isArray(uniform.value) ? new THREE.Vector2().fromArray(uniform.value) : uniform.value,
             type: "2f",
           };
           break;
@@ -250,6 +252,7 @@ const ShaderMaterial = ({
     preparedUniforms["u_time"] = { value: 0, type: "1f" };
     preparedUniforms["u_resolution"] = {
       value: new THREE.Vector2(size.width * 2, size.height * 2),
+      type: "2f",  // Added type property
     }; // Initialize u_resolution
     return preparedUniforms;
   };
