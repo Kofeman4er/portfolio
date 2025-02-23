@@ -2,12 +2,14 @@
 import { useEffect, useRef, useState } from "react";
 import { Color, Scene, Fog, PerspectiveCamera, Vector3 } from "three";
 import ThreeGlobe from "three-globe";
-import { useThree, Object3DNode, Canvas, extend } from "@react-three/fiber";
+import { useThree, Canvas, extend } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import countries from "@/data/globe.json";
-declare module "@react-three/fiber" {
+import { type ThreeElement } from '@react-three/fiber'
+
+declare module '@react-three/fiber' {
   interface ThreeElements {
-    threeGlobe: Object3DNode<ThreeGlobe, typeof ThreeGlobe>;
+    customElement: ThreeElement<typeof ThreeGlobe>
   }
 }
 
@@ -115,7 +117,7 @@ export function Globe({ globeConfig, data }: WorldProps) {
 
   const _buildData = () => {
     const arcs = data;
-    let points = [];
+    const points = [];
     for (let i = 0; i < arcs.length; i++) {
       const arc = arcs[i];
       const rgb = hexToRgb(arc.color) as { r: number; g: number; b: number };
@@ -177,13 +179,13 @@ export function Globe({ globeConfig, data }: WorldProps) {
       .arcAltitude((e) => {
         return (e as { arcAlt: number }).arcAlt * 1;
       })
-      .arcStroke((e) => {
+      .arcStroke(() => {
         return [0.32, 0.28, 0.3][Math.round(Math.random() * 2)];
       })
       .arcDashLength(defaultProps.arcLength)
       .arcDashInitialGap((e) => (e as { order: number }).order * 1)
       .arcDashGap(15)
-      .arcDashAnimateTime((e) => defaultProps.arcTime);
+      .arcDashAnimateTime(() => defaultProps.arcTime);
 
     globeRef.current
       .pointsData(data)
