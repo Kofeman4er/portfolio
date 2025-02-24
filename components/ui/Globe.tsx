@@ -5,7 +5,7 @@ import ThreeGlobe from "three-globe";
 import { useThree, Canvas, extend } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import countries from "@/data/globe.json";
-import { type ThreeElement } from '@react-three/fiber'
+import { ThreeElement } from '@react-three/fiber'
 
 declare module '@react-three/fiber' {
   interface ThreeElements {
@@ -196,7 +196,7 @@ export function Globe({ globeConfig, data }: WorldProps) {
 
     globeRef.current
       .ringsData([])
-      .ringColor(() => "#000080")
+      .ringColor(() => (t: number) => "#000080")
       .ringMaxRadius(defaultProps.maxRings)
       .ringPropagationSpeed(RING_PROPAGATION_SPEED)
       .ringRepeatPeriod(
