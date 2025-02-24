@@ -27,12 +27,8 @@ const Approach = () => {
                     description = "We start with design analysis and come up with the first vision of the product. Making prototypes, we see what solutions will work better, discuss them with product owners and potential users. System architecture is also developed at this stage, simultaneously. Technologies stack is chosen corresponding to projects needs. We plan work schedule in a way to provide the fastest delivery. Our quality assurance team starts working right after the project beginning and with the help of automated and performance testing, helps to provide further product scalability and smooth features extension.">
                     <CanvasRevealEffect
                         animationSpeed={3}
-                        containerClassName="bg-black"
-                        colors={[
-                            [236, 72, 153],
-                            [232, 121, 249],
-                        ]}
-                        dotSize={2}
+                        containerClassName="bg-purple"
+                        colors={[[125, 211, 252]]}
                     />
                 </Card>
                 <Card

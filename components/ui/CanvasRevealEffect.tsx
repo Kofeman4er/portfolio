@@ -58,7 +58,7 @@ interface DotMatrixProps {
 }
 
 const DotMatrix: React.FC<DotMatrixProps> = ({
-  colors = [[0, 0, 0]],
+  colors = [[211,211,211]],
   opacities = [0.04, 0.04, 0.04, 0.04, 0.04, 0.08, 0.08, 0.08, 0.08, 0.14],
   totalSize = 4,
   dotSize = 2,
@@ -95,14 +95,7 @@ const DotMatrix: React.FC<DotMatrixProps> = ({
     }
 
     return {
-      u_colors: {
-        value: colorsArray.map((color) => [
-          color[0] / 255,
-          color[1] / 255,
-          color[2] / 255,
-        ]),
-        type: "uniform3fv",
-      },
+      
       u_opacities: {
         value: opacities,
         type: "uniform1fv",
@@ -140,16 +133,14 @@ const DotMatrix: React.FC<DotMatrixProps> = ({
         }
         void main() {
             vec2 st = fragCoord.xy;
-            ${
-              center.includes("x")
-                ? "st.x -= abs(floor((mod(u_resolution.x, u_total_size) - u_dot_size) * 0.5));"
-                : ""
-            }
-            ${
-              center.includes("y")
-                ? "st.y -= abs(floor((mod(u_resolution.y, u_total_size) - u_dot_size) * 0.5));"
-                : ""
-            }
+            ${center.includes("x")
+          ? "st.x -= abs(floor((mod(u_resolution.x, u_total_size) - u_dot_size) * 0.5));"
+          : ""
+        }
+            ${center.includes("y")
+          ? "st.y -= abs(floor((mod(u_resolution.y, u_total_size) - u_dot_size) * 0.5));"
+          : ""
+        }
       float opacity = step(0.0, st.x);
       opacity *= step(0.0, st.y);
 
@@ -229,14 +220,7 @@ const ShaderMaterial = ({
         case "uniform1fv":
           preparedUniforms[uniformName] = { value: uniform.value, type: "1fv" };
           break;
-          case "uniform3fv":
-            preparedUniforms[uniformName] = {
-              value: uniform.value.map((v: number[]) =>
-                new THREE.Vector3().fromArray(v)
-              ),
-              type: "3fv",
-            };
-            break;
+
         case "uniform2f":
           preparedUniforms[uniformName] = {
             value: Array.isArray(uniform.value) ? new THREE.Vector2().fromArray(uniform.value) : uniform.value,
@@ -292,9 +276,9 @@ const ShaderMaterial = ({
       blendSrc: THREE.SrcAlphaFactor,
       blendDst: THREE.OneFactor,
     });
-  
+
     return materialObject;
-  }, [ source, getUniforms]);
+  }, [source, getUniforms]);
 
   return (
     <mesh ref={ref}>
